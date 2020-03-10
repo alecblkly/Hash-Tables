@@ -55,12 +55,11 @@ class HashTable:
         # Find the index, utilizing _hash_mod
         index = self._hash_mod(key)
         # Check the storage index, will print a warning
-        # TODO: LinkedPair for collision -- Day 2
         if self.storage[index] is not None:
             print(
                 f"Danger, Danger, Collision detected at index: ({index}).")
-        # Setting the current storage[index] to the value
-        self.storage[index] = value
+        # Setting the current storage[index] to key, value
+        self.storage[index] = LinkedPair(key, value)
 
     def remove(self, key):
         '''
@@ -90,8 +89,17 @@ class HashTable:
         # Have key for this function
         # Finding the index, utilizing _hash_mod
         index = self._hash_mod(key)
-        # Return the index
-        return self.storage[index]
+        # If there is an item at storage[index]
+        if self.storage[index] is not None:
+            # If the key at the index is the key
+            if self.storage[index].key == key:
+                # Return the value at that index
+                return self.storage[index].value
+            else:
+                # Printing the error / where the error is located
+                print(f"Danger, Danger, A Key is not at ({index}).")
+                # Returning None per spec
+                return None
 
     def resize(self):
         '''
@@ -102,12 +110,20 @@ class HashTable:
         '''
         # Only have self, similar to dynamic_array - double_size
         # Double the capacity --> self.capacity *= 2
-        # Set a new hash table
-        # LinkedPair or Set
-        # Rehash keys
-        # Move the current over to the new
+        self.capacity *= 2
+        # Setting new_storage to list of none * capacity
+        new_storage = [None] * self.capacity
+        # Looking for items in storage
+        for bucket_item in self.storage:
+            # Only if there is an item within the storage
+            # New storage is created
+            # Assigning the key/value pair into the new location
+            if bucket_item is not None:
+                new_index = self._hash_mod(bucket_item.key)
+                new_storage[new_index] = LinkedPair(
+                    bucket_item.key, bucket_item.value)
 
-        pass
+        self.storage = new_storage
 
 
 if __name__ == "__main__":
