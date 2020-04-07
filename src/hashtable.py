@@ -125,22 +125,23 @@ class HashTable:
         '''
         # Only have self, similar to dynamic_array - double_size
         # Double the capacity --> self.capacity *= 2
-        # TODO: Refactor, not fully working with tests.
-        # self.capacity *= 2
-        # # Setting new_storage to list of none * capacity
-        # new_storage = [None] * self.capacity
-        # # Looking for items in storage
-        # for bucket_item in self.storage:
-        #     # Only if there is an item within the storage
-        #     # New storage is created
-        #     # Assigning the key/value pair into the new location
-        #     if bucket_item is not None:
-        #         new_index = self._hash_mod(bucket_item.key)
-        #         new_storage[new_index] = LinkedPair(
-        #             bucket_item.key, bucket_item.value)
-
-        # self.storage = new_storage
-        pass
+        self.capacity *= 2
+        # Saving storage
+        old_storage = self.storage
+        # Setting new_storage to list of none * capacity
+        new_storage = [None] * self.capacity
+        # Setting storage to new_storage
+        self.storage = new_storage
+        # Looking for items in storage
+        for i in range(len(old_storage)):
+            # Only if there is an item within the storage
+            # New storage is created
+            # Assigning the key/value pair into the new location
+            if old_storage[i] is not None:
+                bucket_item = old_storage[i]
+                while bucket_item is not None:
+                    self.insert(bucket_item.key, bucket_item.value)
+                    bucket_item = bucket_item.next
 
 
 if __name__ == "__main__":
